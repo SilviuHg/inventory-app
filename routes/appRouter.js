@@ -11,10 +11,13 @@ router.post("/create-item", itemsController.createItemPost);
 router.get("/create-category", categoryController.createCategoryGet); // render category form
 router.post("/create-category", categoryController.createCategoryPost);
 
-router.get("/item/:id/", itemController.itemGet); // render each item individually
-router.post("/item/:id/", itemController.itemDeletePost); // delete item
-router.get("/item/:id/update", itemController.itemUpdateGet); // update each item individually
-router.post("/item/:id/update", itemController.itemUpdatePost);
+router.get("/categories", categoryController.allCategoriesGet); // render all categories
+router.get("/items", itemsController.allItemsGet); // render all items
+
+router.get("/item/:id/", itemsController.itemGet); // render each item individually
+router.post("/item/:id/", itemsController.itemDeletePost); // delete item
+router.get("/item/:id/update", itemsController.itemUpdateGet); // update each item individually
+router.post("/item/:id/update", itemsController.itemUpdatePost);
 
 router.get("/category/:id", categoryController.categoryGet); // render each category individually
 router.post("/category/:id", categoryController.categoryDeletePost); // delete category

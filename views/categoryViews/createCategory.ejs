@@ -4,6 +4,13 @@
     <title>Inventory</title>
   </head>
   <body>
+    <%- include("../partials/navbar.ejs") %>
     <h1>Create new category</h1>
+    <form method="POST" action="/create-category">
+      <div>
+        <input required type="text" name="category-name" placeholder="Name" />
+      </div>
+      <button type="submit">Add</button>
+    </form>
   </body>
 </html>

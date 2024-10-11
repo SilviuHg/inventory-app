@@ -35,7 +35,7 @@ VALUES
   ('The Witcher 3', 'CD Projekt Red', 2015), 
   ('Cyberpunk 2077', 'CD Projekt Red', 2020); 
 
-INSERT INTO genres (name)
+INSERT INTO genres (genre_name)
 VALUES
   ('Roleplay game'),
   ('Action'),

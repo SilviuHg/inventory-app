@@ -1,9 +1,20 @@
+const db = require("../db/queries");
 exports.createCategoryGet = (req, res) => {
   // render category form
+  res.render("./categoryViews/createCategory");
+};
+
+exports.allCategoriesGet = async (req, res) => {
+  // render all categories
+  const categories = await db.getCategories();
+  res.render("./categoryViews/categories", {
+    categories: categories,
+  });
 };
 
 exports.createCategoryPost = (req, res) => {
   // submit category form
+  //redirect
 };
 
 exports.categoryGet = (req, res) => {

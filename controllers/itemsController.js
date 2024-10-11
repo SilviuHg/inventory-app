@@ -1,9 +1,18 @@
+const db = require("../db/queries");
+
 exports.homepageGet = (req, res) => {
   res.render("index");
 };
 
+exports.allItemsGet = async (req, res) => {
+  // render all items
+  const items = await db.getItems();
+  res.render("./itemViews/itemsList", { items: items });
+};
+
 exports.createItemGet = (req, res) => {
   // render item form
+  res.render("./itemViews/createItem");
 };
 
 exports.createItemPost = (req, res) => {

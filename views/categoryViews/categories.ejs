@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Inventory</title>
+  </head>
+  <body>
+    <%- include("../partials/navbar.ejs") %>
+    <h1>Category list</h1>
+    <form action="/create-category" method="GET">
+      <button type="submit">Create category</button>
+    </form>
+    <ul>
+      <% if (locals.categories) {%> <% categories.forEach((category) => { %>
+      <li>
+        <a href="/category/<%= category.id %>"><%= category.genre_name %></a>
+      </li>
+      <% }); %> <% } %>
+    </ul>
+  </body>
+</html>
