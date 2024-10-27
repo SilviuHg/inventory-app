@@ -20,6 +20,44 @@ async function getItems() {
   }
 }
 
+async function getItem(id) {
+  try {
+    const { rows } = await pool.query(
+      `SELECT games.*, genres.genre_name , genres.id as genre_id
+      FROM games 
+      INNER JOIN games_genres
+      ON games.id = games_genres.game_id
+      INNER JOIN genres
+      ON games_genres.genre_id = genres.id
+      WHERE games.id = $1`,
+      [id]
+    );
+    return rows;
+  } catch (err) {
+    console.error("Error retrieving game information", err);
+    throw err;
+  }
+}
+
+async function getCategory(id) {
+  try {
+    const { rows } = await pool.query(
+      `SELECT games.id as game_id, games.name, genres.genre_name , genres.id as genre_id
+      FROM genres 
+      INNER JOIN games_genres
+      ON genres.id = games_genres.genre_id
+      INNER JOIN games
+      ON games_genres.game_id = games.id
+      WHERE genres.id = $1`,
+      [id]
+    );
+    return rows;
+  } catch (err) {
+    console.error("Error retrieving game information", err);
+    throw err;
+  }
+}
+
 async function getMessageById(id) {
   try {
     const { rows } = await pool.query(`SELECT * FROM messages WHERE id = $1`, [
@@ -42,4 +80,6 @@ async function insertMessage(username, text, date) {
 module.exports = {
   getCategories,
   getItems,
+  getItem,
+  getCategory,
 };

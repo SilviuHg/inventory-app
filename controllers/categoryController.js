@@ -1,4 +1,6 @@
 const db = require("../db/queries");
+// manage add items (queries + controllers)
+// manage delete/edit category/items
 exports.createCategoryGet = (req, res) => {
   // render category form
   res.render("./categoryViews/createCategory");
@@ -17,8 +19,10 @@ exports.createCategoryPost = (req, res) => {
   //redirect
 };
 
-exports.categoryGet = (req, res) => {
+exports.categoryGet = async (req, res) => {
   // render categories individually
+  const category = await db.getCategory(req.params.id);
+  res.render("./categoryViews/filteredCategory", { category: category });
 };
 
 exports.categoryDeletePost = (req, res) => {

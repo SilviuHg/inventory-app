@@ -10,17 +10,20 @@ exports.allItemsGet = async (req, res) => {
   res.render("./itemViews/itemsList", { items: items });
 };
 
-exports.createItemGet = (req, res) => {
+exports.createItemGet = async (req, res) => {
   // render item form
-  res.render("./itemViews/createItem");
+  const categories = await db.getCategories(); // get the list of categories for each item
+  res.render("./itemViews/createItem", { categories: categories });
 };
 
 exports.createItemPost = (req, res) => {
   // submit item form
 };
 
-exports.itemGet = (req, res) => {
+exports.itemGet = async (req, res) => {
   // render item individually
+  const item = await db.getItem(req.params.id);
+  res.render("./itemViews/item", { item: item });
 };
 
 exports.itemDeletePost = (req, res) => {

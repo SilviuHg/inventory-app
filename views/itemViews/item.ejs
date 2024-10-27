@@ -4,6 +4,18 @@
     <title>Inventory</title>
   </head>
   <body>
-    <h1>Individual item</h1>
+    <%- include("../partials/navbar.ejs") %> <% if (locals.item) { %>
+    <h2>Item: <%= item[0].name %></h2>
+    <p>Developer: <%= item[0].developer %></p>
+    <p>Year released: <%= item[0].year_released %></p>
+    <p>Categories:</p>
+    <ul>
+      <% item.forEach((item) => { %>
+      <li>
+        <a href="/category/<%= item.genre_id %>"><%= item.genre_name %></a>
+      </li>
+      <% }); %>
+    </ul>
+    <% } %>
   </body>
 </html>
