@@ -1,5 +1,4 @@
 const db = require("../db/queries");
-// manage add items (queries + controllers)
 // manage delete/edit category/items
 exports.createCategoryGet = (req, res) => {
   // render category form
@@ -14,15 +13,19 @@ exports.allCategoriesGet = async (req, res) => {
   });
 };
 
-exports.createCategoryPost = (req, res) => {
+exports.createCategoryPost = async (req, res) => {
   // submit category form
-  //redirect
+  await db.insertCategory(req.body.category);
+  res.redirect("/");
 };
 
 exports.categoryGet = async (req, res) => {
   // render categories individually
   const category = await db.getCategory(req.params.id);
-  res.render("./categoryViews/filteredCategory", { category: category });
+  res.render("./categoryViews/filteredCategory", {
+    genre_name: category[0].genre_name,
+    games: category.filter((item) => item.game_id), // only include games if a category has any, if not, include just genre_name
+  });
 };
 
 exports.categoryDeletePost = (req, res) => {

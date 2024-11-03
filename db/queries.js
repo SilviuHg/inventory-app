@@ -42,11 +42,11 @@ async function getItem(id) {
 async function getCategory(id) {
   try {
     const { rows } = await pool.query(
-      `SELECT games.id as game_id, games.name, genres.genre_name , genres.id as genre_id
+      `SELECT genres.genre_name , genres.id as genre_id, games.id as game_id, games.name
       FROM genres 
-      INNER JOIN games_genres
+      LEFT JOIN games_genres
       ON genres.id = games_genres.genre_id
-      INNER JOIN games
+      LEFT JOIN games
       ON games_genres.game_id = games.id
       WHERE genres.id = $1`,
       [id]
@@ -58,23 +58,26 @@ async function getCategory(id) {
   }
 }
 
-async function getMessageById(id) {
-  try {
-    const { rows } = await pool.query(`SELECT * FROM messages WHERE id = $1`, [
-      id,
-    ]);
-    return rows;
-  } catch (err) {
-    console.error("Error retrieving message by ID", err);
-    throw err;
-  }
+async function insertCategory(category) {
+  await pool.query("INSERT INTO genres (genre_name) VALUES ($1)", [category]);
 }
 
-async function insertMessage(username, text, date) {
-  await pool.query(
-    "INSERT INTO messages (username, text, date) VALUES ($1, $2, $3)",
-    [username, text, date]
+async function insertGame(name, developer, year_released) {
+  const { rows } = await pool.query(
+    "INSERT INTO games (name, developer, year_released) VALUES ($1, $2, $3) RETURNING id",
+    [name, developer, year_released]
   );
+  return rows[0].id; // return the game's id
+}
+
+async function insertGameGenres(gameId, genres) {
+  const insertPromises = genres.map(async (genreId) => {
+    return pool.query(
+      "INSERT INTO games_genres (game_id, genre_id) VALUES ($1, $2)",
+      [gameId, genreId]
+    );
+  });
+  await Promise.all(insertPromises);
 }
 
 module.exports = {
@@ -82,4 +85,7 @@ module.exports = {
   getItems,
   getItem,
   getCategory,
+  insertCategory,
+  insertGame,
+  insertGameGenres,
 };

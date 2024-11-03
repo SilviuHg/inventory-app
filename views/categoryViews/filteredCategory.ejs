@@ -4,16 +4,19 @@
     <title>Inventory</title>
   </head>
   <body>
-    <%- include("../partials/navbar.ejs") %> <% if (locals.category) { %>
-    <h2>Category: <%= category[0].genre_name %></h2>
+    <%- include("../partials/navbar.ejs") %> <% if (locals.genre_name) { %>
+    <h2>Category: <%= genre_name %></h2>
+    <% if (locals.games.length > 0) { %>
     <p>Games:</p>
     <ul>
-      <% category.forEach((category) => { %>
+      <% games.forEach((game) => { %>
       <li>
-        <a href="/item/<%= category.game_id %>"><%= category.name %></a>
+        <a href="/item/<%= game.game_id %>"><%= game.name %></a>
       </li>
       <% }); %>
     </ul>
-    <% } %>
+    <% } else { %>
+    <p>No games available for this category.</p>
+    <% } %> <% } %>
   </body>
 </html>

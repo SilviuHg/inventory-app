@@ -16,8 +16,12 @@ exports.createItemGet = async (req, res) => {
   res.render("./itemViews/createItem", { categories: categories });
 };
 
-exports.createItemPost = (req, res) => {
+exports.createItemPost = async (req, res) => {
   // submit item form
+  const { name, developer, year_released, genres } = req.body;
+  const gameId = await db.insertGame(name, developer, year_released);
+  await db.insertGameGenres(gameId, genres);
+  res.redirect("/");
 };
 
 exports.itemGet = async (req, res) => {
