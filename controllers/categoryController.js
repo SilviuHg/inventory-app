@@ -1,4 +1,15 @@
 const db = require("../db/queries");
+const { body, validationResult } = require("express-validator");
+
+const lengthErr = "must be between 1 and 25 characters.";
+
+const validateCategory = [
+  body("category")
+    .trim()
+    .isLength({ min: 1, max: 25 })
+    .withMessage(`Category name ${lengthErr}`),
+];
+
 // manage delete/edit category/items
 exports.createCategoryGet = (req, res) => {
   // render category form
@@ -13,11 +24,22 @@ exports.allCategoriesGet = async (req, res) => {
   });
 };
 
-exports.createCategoryPost = async (req, res) => {
-  // submit category form
-  await db.insertCategory(req.body.category);
-  res.redirect("/");
-};
+// submit category form
+exports.createCategoryPost = [
+  validateCategory,
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).render("./categoryViews/createCategory", {
+        errors: errors.array(),
+      });
+    }
+
+    await db.insertCategory(req.body.category);
+    res.redirect("/");
+  },
+];
 
 exports.categoryGet = async (req, res) => {
   // render categories individually

@@ -4,7 +4,8 @@
     <title>Inventory</title>
   </head>
   <body>
-    <%- include("../partials/navbar.ejs") %>
+    <%- include("../partials/navbar.ejs") %> <%-
+    include("../partials/errors.ejs") %>
     <h1>Create game item</h1>
     <form method="POST" action="/create-item">
       <div>
@@ -22,7 +23,7 @@
         />
       </div>
       <div>
-        <select multiple required name="genres">
+        <select multiple required name="genres[]">
           <option disabled value="" selected>Select a category</option>
           <% if (locals.categories) {%> <% categories.forEach((category) => { %>
           <option value="<%= category.id %>"><%= category.genre_name %></option>

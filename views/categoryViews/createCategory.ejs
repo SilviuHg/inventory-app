@@ -4,7 +4,8 @@
     <title>Inventory</title>
   </head>
   <body>
-    <%- include("../partials/navbar.ejs") %>
+    <%- include("../partials/navbar.ejs") %> <%-
+    include("../partials/errors.ejs") %>
     <h1>Create new category</h1>
     <form method="POST" action="/create-category">
       <div>
