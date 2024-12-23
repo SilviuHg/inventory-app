@@ -23,7 +23,7 @@
         />
       </div>
       <div>
-        <select multiple required name="genres[]">
+        <select multiple required name="genres">
           <option disabled value="" selected>Select a category</option>
           <% if (locals.categories) {%> <% categories.forEach((category) => { %>
           <option value="<%= category.id %>"><%= category.genre_name %></option>

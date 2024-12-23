@@ -42,7 +42,7 @@ async function getItem(id) {
 async function getCategory(id) {
   try {
     const { rows } = await pool.query(
-      `SELECT genres.genre_name , genres.id as genre_id, games.id as game_id, games.name
+      `SELECT genres.genre_name, genres.id as genre_id, games.id as game_id, games.name
       FROM genres 
       LEFT JOIN games_genres
       ON genres.id = games_genres.genre_id
@@ -53,31 +53,65 @@ async function getCategory(id) {
     );
     return rows;
   } catch (err) {
-    console.error("Error retrieving game information", err);
+    console.error("Error retrieving category information", err);
     throw err;
   }
 }
 
 async function insertCategory(category) {
-  await pool.query("INSERT INTO genres (genre_name) VALUES ($1)", [category]);
+  try {
+    await pool.query("INSERT INTO genres (genre_name) VALUES ($1)", [category]);
+  } catch (err) {
+    console.error("Error adding category", err);
+    throw err;
+  }
 }
 
 async function insertGame(name, developer, year_released) {
-  const { rows } = await pool.query(
-    "INSERT INTO games (name, developer, year_released) VALUES ($1, $2, $3) RETURNING id",
-    [name, developer, year_released]
-  );
-  return rows[0].id; // return the game's id
+  try {
+    const { rows } = await pool.query(
+      "INSERT INTO games (name, developer, year_released) VALUES ($1, $2, $3) RETURNING id",
+      [name, developer, year_released]
+    );
+    return rows[0].id; // return the game's id
+  } catch (err) {
+    console.error("Error adding game", err);
+    throw err;
+  }
 }
 
 async function insertGameGenres(gameId, genres) {
-  const insertPromises = genres.map(async (genreId) => {
-    return pool.query(
-      "INSERT INTO games_genres (game_id, genre_id) VALUES ($1, $2)",
-      [gameId, genreId]
-    );
-  });
-  await Promise.all(insertPromises);
+  try {
+    const insertPromises = genres.map(async (genreId) => {
+      return pool.query(
+        "INSERT INTO games_genres (game_id, genre_id) VALUES ($1, $2)",
+        [gameId, genreId]
+      );
+    });
+    await Promise.all(insertPromises);
+  } catch (err) {
+    console.error("Error adding game genre", err);
+    throw err;
+  }
+}
+
+async function deleteItem(id) {
+  try {
+    await pool.query(`DELETE FROM games_genres WHERE game_id = $1`, [id]);
+    await pool.query(`DELETE FROM games WHERE id = $1`, [id]);
+  } catch (err) {
+    console.error("Error while trying to delete", err);
+    throw err;
+  }
+}
+
+async function deleteCategory(id) {
+  try {
+    await pool.query(`DELETE FROM genres WHERE id = $1`, [id]);
+  } catch (err) {
+    console.error("Error retrieving game information", err);
+    throw err;
+  }
 }
 
 module.exports = {
@@ -88,4 +122,6 @@ module.exports = {
   insertCategory,
   insertGame,
   insertGameGenres,
+  deleteItem,
+  deleteCategory,
 };

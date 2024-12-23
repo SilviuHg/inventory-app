@@ -10,7 +10,7 @@ const validateCategory = [
     .withMessage(`Category name ${lengthErr}`),
 ];
 
-// manage delete/edit category/items
+// manage edit category/items
 exports.createCategoryGet = (req, res) => {
   // render category form
   res.render("./categoryViews/createCategory");
@@ -45,13 +45,29 @@ exports.categoryGet = async (req, res) => {
   // render categories individually
   const category = await db.getCategory(req.params.id);
   res.render("./categoryViews/filteredCategory", {
-    genre_name: category[0].genre_name,
+    genre: category[0],
     games: category.filter((item) => item.game_id), // only include games if a category has any, if not, include just genre_name
   });
 };
 
-exports.categoryDeletePost = (req, res) => {
+exports.categoryDeletePost = async (req, res) => {
   // Delete category
+
+  const categoryRows = await db.getCategory(req.params.id);
+
+  // check if a category has games (a non null game_id)
+  const hasGames = categoryRows.some((row) => row.game_id !== null);
+
+  if (hasGames) {
+    return res.status(400).render("./categoryViews/filteredCategory", {
+      genre: categoryRows[0],
+      games: categoryRows.filter((item) => item.game_id),
+      errors: [{ msg: "You can't delete a category with games in it!" }],
+    });
+  }
+
+  await db.deleteCategory(req.params.id);
+  res.redirect("/");
 };
 
 exports.categoryUpdateGet = (req, res) => {

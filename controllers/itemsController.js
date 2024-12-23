@@ -75,8 +75,10 @@ exports.itemGet = async (req, res) => {
   res.render("./itemViews/item", { item: item });
 };
 
-exports.itemDeletePost = (req, res) => {
+exports.itemDeletePost = async (req, res) => {
   // Delete item
+  await db.deleteItem(req.params.id);
+  res.redirect("/");
 };
 
 exports.itemUpdateGet = (req, res) => {
