@@ -10,7 +10,7 @@ const validateCategory = [
     .withMessage(`Category name ${lengthErr}`),
 ];
 
-// manage edit category/items
+// add styles/async hndler?
 exports.createCategoryGet = (req, res) => {
   // render category form
   res.render("./categoryViews/createCategory");
@@ -70,10 +70,32 @@ exports.categoryDeletePost = async (req, res) => {
   res.redirect("/");
 };
 
-exports.categoryUpdateGet = (req, res) => {
+exports.categoryUpdateGet = async (req, res) => {
   // render category update form
+
+  const category = await db.getCategory(req.params.id);
+
+  res.render("./categoryViews/updateCategory", { category: category[0] });
 };
 
-exports.categoryUpdatePost = (req, res) => {
-  // submit updated category
-};
+// submit updated category
+exports.categoryUpdatePost = [
+  validateCategory,
+  async (req, res) => {
+    const errors = validationResult(req);
+    const genre = await db.getCategory(req.params.id);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).render("./categoryViews/updateCategory", {
+        errors: errors.array(),
+        category: genre[0],
+      });
+    }
+
+    const { category } = req.body;
+    const { id } = req.params;
+
+    await db.updateCategory(id, category);
+    res.redirect("/categories");
+  },
+];

@@ -4,6 +4,38 @@
     <title>Inventory</title>
   </head>
   <body>
-    <h1>Update game item</h1>
+    <%- include("../partials/navbar.ejs") %> <%-
+    include("../partials/errors.ejs") %>
+    <h1>Update game: <%= game.name %></h1>
+    <form method="POST" action="/item/<%= game.id %>/update">
+      <div>
+        <input required type="text" name="name" value="<%= game.name %>" />
+      </div>
+      <div>
+        <input
+          required
+          type="text"
+          name="developer"
+          value="<%= game.developer %>"
+        />
+      </div>
+      <div>
+        <input
+          required
+          type="text"
+          name="year_released"
+          value="<%= game.year_released %>"
+        />
+      </div>
+      <div>
+        <select multiple required name="genres">
+          <option disabled value="">Select a category</option>
+          <% if (locals.categories) {%> <% categories.forEach((category) => { %>
+          <option value="<%= category.id %>" <%= game.genres.includes(category.id) ? "selected" : "" %>><%= category.genre_name %></option>
+          <% }); %> <% } %>
+        </select>
+      </div>
+      <button type="submit">Update</button>
+    </form>
   </body>
 </html>

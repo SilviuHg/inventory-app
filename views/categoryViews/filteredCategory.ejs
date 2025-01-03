@@ -7,6 +7,7 @@
     <%- include("../partials/navbar.ejs") %> <%-
     include("../partials/errors.ejs") %> <% if (locals.genre) { %>
     <h2>Category: <%= genre.genre_name %></h2>
+    <a href="/category/<%= genre.genre_id %>/update">Edit category</a>
     <% if (locals.games.length > 0) { %>
     <p>Games:</p>
     <ul>

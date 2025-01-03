@@ -4,6 +4,19 @@
     <title>Inventory</title>
   </head>
   <body>
-    <h1>Update category</h1>
+    <%- include("../partials/navbar.ejs") %> <%-
+    include("../partials/errors.ejs") %>
+    <h1>Update category: <%= category.genre_name %></h1>
+    <form method="POST" action="/category/<%= category.genre_id %>/update">
+      <div>
+        <input
+          required
+          type="text"
+          name="category"
+          value="<%= category.genre_name %>"
+        />
+      </div>
+      <button type="submit">Update</button>
+    </form>
   </body>
 </html>

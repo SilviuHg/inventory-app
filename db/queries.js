@@ -109,7 +109,49 @@ async function deleteCategory(id) {
   try {
     await pool.query(`DELETE FROM genres WHERE id = $1`, [id]);
   } catch (err) {
-    console.error("Error retrieving game information", err);
+    console.error("Error while trying to delete", err);
+    throw err;
+  }
+}
+
+async function updateGame(id, name, developer, year) {
+  try {
+    await pool.query(
+      `UPDATE games SET name = $1, developer = $2, year_released = $3 WHERE id = $4`,
+      [name, developer, year, id]
+    );
+  } catch (err) {
+    console.error("Error updating game details", err);
+    throw err;
+  }
+}
+
+async function updateGameGenres(gameId, genres) {
+  try {
+    await pool.query(`DELETE FROM games_genres WHERE game_id = $1`, [gameId]); // first delete the old categories from the game
+
+    const insertPromises = genres.map((genreId) =>
+      pool.query(
+        `INSERT INTO games_genres (game_id, genre_id) VALUES ($1, $2)`,
+        [gameId, genreId]
+      )
+    );
+
+    await Promise.all(insertPromises);
+  } catch (err) {
+    console.error("Error updating game genres", err);
+    throw err;
+  }
+}
+
+async function updateCategory(id, genreName) {
+  try {
+    await pool.query(`UPDATE genres SET genre_name = $1 WHERE id = $2`, [
+      genreName,
+      id,
+    ]);
+  } catch (err) {
+    console.error("Error updating category", err);
     throw err;
   }
 }
@@ -124,4 +166,7 @@ module.exports = {
   insertGameGenres,
   deleteItem,
   deleteCategory,
+  updateGame,
+  updateGameGenres,
+  updateCategory,
 };
