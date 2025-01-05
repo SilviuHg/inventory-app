@@ -1,5 +1,6 @@
 const db = require("../db/queries");
 const { body, validationResult } = require("express-validator");
+const asyncHandler = require("express-async-handler");
 
 const lengthErr = "must be between 1 and 25 characters.";
 const rangeErr = `Year released must be a valid year (range between 1900-${new Date().getFullYear()})`;
@@ -33,22 +34,22 @@ exports.homepageGet = (req, res) => {
   res.render("index");
 };
 
-exports.allItemsGet = async (req, res) => {
+exports.allItemsGet = asyncHandler(async (req, res) => {
   // render all items
   const items = await db.getItems();
   res.render("./itemViews/itemsList", { items: items });
-};
+});
 
-exports.createItemGet = async (req, res) => {
+exports.createItemGet = asyncHandler(async (req, res) => {
   // render item form
   const categories = await db.getCategories(); // get the list of categories for each item
   res.render("./itemViews/createItem", { categories: categories });
-};
+});
 
 // submit item form
 exports.createItemPost = [
   validateGame,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -66,22 +67,22 @@ exports.createItemPost = [
     const gameId = await db.insertGame(name, developer, year_released);
     await db.insertGameGenres(gameId, normalizedGenres);
     res.redirect("/");
-  },
+  }),
 ];
 
-exports.itemGet = async (req, res) => {
+exports.itemGet = asyncHandler(async (req, res) => {
   // render item individually
   const item = await db.getItem(req.params.id);
   res.render("./itemViews/item", { item: item });
-};
+});
 
-exports.itemDeletePost = async (req, res) => {
+exports.itemDeletePost = asyncHandler(async (req, res) => {
   // Delete item
   await db.deleteItem(req.params.id);
   res.redirect("/");
-};
+});
 
-exports.itemUpdateGet = async (req, res) => {
+exports.itemUpdateGet = asyncHandler(async (req, res) => {
   // render item update form
   const categories = await db.getCategories();
   const item = await db.getItem(req.params.id); // the item returns a row for each category
@@ -95,12 +96,12 @@ exports.itemUpdateGet = async (req, res) => {
   };
 
   res.render("./itemViews/updateItem", { categories: categories, game: game });
-};
+});
 
 // submit updated item
 exports.itemUpdatePost = [
   validateGame,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     const categories = await db.getCategories();
 
@@ -132,5 +133,5 @@ exports.itemUpdatePost = [
     await db.updateGameGenres(id, normalizedGenres);
 
     res.redirect("/items");
-  },
+  }),
 ];

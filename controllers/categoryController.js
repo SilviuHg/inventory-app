@@ -1,5 +1,6 @@
 const db = require("../db/queries");
 const { body, validationResult } = require("express-validator");
+const asyncHandler = require("express-async-handler");
 
 const lengthErr = "must be between 1 and 25 characters.";
 
@@ -10,24 +11,23 @@ const validateCategory = [
     .withMessage(`Category name ${lengthErr}`),
 ];
 
-// add styles/async hndler?
 exports.createCategoryGet = (req, res) => {
   // render category form
   res.render("./categoryViews/createCategory");
 };
 
-exports.allCategoriesGet = async (req, res) => {
+exports.allCategoriesGet = asyncHandler(async (req, res) => {
   // render all categories
   const categories = await db.getCategories();
   res.render("./categoryViews/categories", {
     categories: categories,
   });
-};
+});
 
 // submit category form
 exports.createCategoryPost = [
   validateCategory,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -38,19 +38,19 @@ exports.createCategoryPost = [
 
     await db.insertCategory(req.body.category);
     res.redirect("/");
-  },
+  }),
 ];
 
-exports.categoryGet = async (req, res) => {
+exports.categoryGet = asyncHandler(async (req, res) => {
   // render categories individually
   const category = await db.getCategory(req.params.id);
   res.render("./categoryViews/filteredCategory", {
     genre: category[0],
     games: category.filter((item) => item.game_id), // only include games if a category has any, if not, include just genre_name
   });
-};
+});
 
-exports.categoryDeletePost = async (req, res) => {
+exports.categoryDeletePost = asyncHandler(async (req, res) => {
   // Delete category
 
   const categoryRows = await db.getCategory(req.params.id);
@@ -68,20 +68,19 @@ exports.categoryDeletePost = async (req, res) => {
 
   await db.deleteCategory(req.params.id);
   res.redirect("/");
-};
+});
 
-exports.categoryUpdateGet = async (req, res) => {
+exports.categoryUpdateGet = asyncHandler(async (req, res) => {
   // render category update form
-
   const category = await db.getCategory(req.params.id);
 
   res.render("./categoryViews/updateCategory", { category: category[0] });
-};
+});
 
 // submit updated category
 exports.categoryUpdatePost = [
   validateCategory,
-  async (req, res) => {
+  asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     const genre = await db.getCategory(req.params.id);
 
@@ -97,5 +96,5 @@ exports.categoryUpdatePost = [
 
     await db.updateCategory(id, category);
     res.redirect("/categories");
-  },
+  }),
 ];
