@@ -9,6 +9,9 @@ app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true }));
 
+const assetsPath = path.join(__dirname, "public");
+app.use(express.static(assetsPath));
+
 // ROUTES
 app.use("/", router);
 

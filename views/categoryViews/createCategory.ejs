@@ -4,14 +4,16 @@
     <title>Inventory</title>
   </head>
   <body>
-    <%- include("../partials/navbar.ejs") %> <%-
-    include("../partials/errors.ejs") %>
-    <h1>Create new category</h1>
-    <form method="POST" action="/create-category">
-      <div>
-        <input required type="text" name="category" placeholder="Name" />
-      </div>
-      <button type="submit">Add</button>
-    </form>
+    <div id="root">
+      <%- include("../partials/navbar.ejs") %> <%-
+      include("../partials/errors.ejs") %>
+      <h1>Create new category</h1>
+      <form method="POST" action="/create-category">
+        <div>
+          <input required type="text" name="category" placeholder="Name" />
+        </div>
+        <button type="submit">Add</button>
+      </form>
+    </div>
   </body>
 </html>

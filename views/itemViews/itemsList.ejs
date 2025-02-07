@@ -4,17 +4,19 @@
     <title>Inventory</title>
   </head>
   <body>
-    <%- include("../partials/navbar.ejs") %>
-    <h1>Items list</h1>
-    <form action="/create-item" method="GET">
-      <button type="submit">Create item</button>
-    </form>
-    <ul>
-      <% if (locals.items) {%> <% items.forEach((item) => { %>
-      <li>
-        <a href="/item/<%= item.id %>"><%= item.name %></a>
-      </li>
-      <% }); %> <% } %>
-    </ul>
+    <div id="root">
+      <%- include("../partials/navbar.ejs") %>
+      <h1>Items list</h1>
+      <form action="/create-item" method="GET">
+        <button type="submit">Create item</button>
+      </form>
+      <ol>
+        <% if (locals.items) {%> <% items.forEach((item) => { %>
+        <li>
+          <a href="/item/<%= item.id %>"><%= item.name %></a>
+        </li>
+        <% }); %> <% } %>
+      </ol>
+    </div>
   </body>
 </html>

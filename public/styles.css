@@ -1,0 +1,164 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+  font-family: "Merriweather", serif;
+  font-weight: 400;
+}
+
+h1,
+button {
+  margin: 0.3rem 0 1.1rem 0;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+h2,
+p,
+li {
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+input,
+select {
+  width: 100%;
+}
+
+form > div {
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+button,
+input,
+select {
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: white;
+  cursor: pointer;
+}
+
+input {
+  padding: 10px 20px;
+  background-color: white;
+}
+
+select {
+  padding: 5px 20px;
+}
+
+/* HIDE THE SELECT MENU SCROLLBAR */
+
+select::-webkit-scrollbar {
+  display: none;
+}
+
+ul > li {
+  list-style: circle;
+}
+
+input,
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* NAVIGATION STYLES */
+
+.header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+.header-title {
+  border-bottom: 1px solid black;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.header-title > h1 {
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.header-buttons {
+  padding-top: 0.5rem;
+}
+
+/* BODY STYLES */
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.categories-title {
+  padding-bottom: 2rem;
+}
+
+/* MEDIA QUERIES FOR RESPONSIVENESS */
+
+@media screen and (min-width: 1024px) {
+  .header-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .item-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  body {
+    font-size: 1.3rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .header-title > h1 {
+    font-size: 2rem;
+  }
+}
